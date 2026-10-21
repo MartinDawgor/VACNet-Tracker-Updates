@@ -1,0 +1,951 @@
+
+:root {
+	--bg-page: #0a0a0b;
+	--bg-panel: #202123;
+	--bg-inset: #313234;
+	--bg-control: #4d4d4d;
+	--bg-control-hover: #5c5c5c;
+	--border: rgba(255, 255, 255, 0.12);
+	--outline: rgba(255, 255, 255, 0.28);
+	--text: #ffffff;
+	--text-muted: #acacac;
+	--text-disabled: rgba(255, 255, 255, 0.38);
+	--accent: #6ea31d;
+	--positive: #ffc20a;
+	--negative: #529cd8;
+	--positive-container: color-mix(in srgb, var(--positive) 22%, var(--bg-control));
+	--negative-container: color-mix(in srgb, var(--negative) 28%, var(--bg-control));
+	--state-hover: linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08));
+	--state-pressed: linear-gradient(rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.12));
+
+	--font-body: "Noto Sans", system-ui, sans-serif;
+	--type-headline-s: 400 24px/32px var(--font-body);
+	--type-title-s: 500 13px/18px var(--font-body);
+	--type-body-l: 400 14px/20px var(--font-body);
+	--type-body-m: 400 13px/18px var(--font-body);
+	--type-body-s: 400 12px/17px var(--font-body);
+	--type-label-l: 500 13px/18px var(--font-body);
+	--type-label-m: 500 11px/16px var(--font-body);
+
+	--shape-s: 8px;
+	--shape-m: 12px;
+	--shape-l: 16px;
+	--shape-xl: 28px;
+	--shape-full: 9999px;
+
+	--space-xs: 4px;
+	--space-s: 8px;
+	--space-m: 12px;
+	--space-l: 16px;
+	--space-xl: 24px;
+}
+
+@font-face {
+	font-family: "Noto Sans";
+	src: url("https://cdn.[CDN].steamstatic.com/apps/csgo/fonts/NotoSans-Regular.ttf") format("truetype");
+	font-weight: 400;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Noto Sans";
+	src: url("https://cdn.[CDN].steamstatic.com/apps/csgo/fonts/NotoSans-Italic.ttf") format("truetype");
+	font-weight: 400;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "Noto Sans";
+	src: url("https://cdn.[CDN].steamstatic.com/apps/csgo/fonts/NotoSans-Medium.ttf") format("truetype");
+	font-weight: 500;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Noto Sans";
+	src: url("https://cdn.[CDN].steamstatic.com/apps/csgo/fonts/NotoSans-SemiBold.ttf") format("truetype");
+	font-weight: 700;
+	font-style: normal;
+}
+
+body {
+	background-color: var(--bg-page);
+	color: var(--text);
+	font-family: var(--font-body);
+
+	display: flex;
+	flex-direction: column;
+	margin: 0px;
+}
+
+.PageBackground {
+	position: absolute;
+	z-index: -1;
+	width: 100%;
+	height: 100%;
+	background: var(--bg-page);
+}
+
+button {
+	font-family: inherit;
+}
+
+a {
+	color: var(--accent);
+
+	transition-property: color;
+	transition-duration: 0.1s;
+}
+
+a:hover {
+	color: var(--text);
+}
+
+.page-container
+{
+	display:flex;
+	flex-flow: column;
+	margin-top: 16px;
+	padding-bottom: 128px;
+}
+
+/* The labeling page fills the window exactly instead of scrolling */
+body:has(.review-layout) {
+	height: 100dvh;
+	overflow-x: clip;
+
+	& .PageBackground {
+		background: radial-gradient(ellipse 80% 60% at 50% 0%, #17181b, var(--bg-page));
+	}
+
+	& .page-container {
+		flex: 1;
+		min-height: 0;
+		margin: 0px;
+		padding: var(--space-l);
+		container-type: size;
+	}
+
+	& .footer-container {
+		position: static;
+	}
+
+	& .PageHeader .ClipCount {
+		display: none;
+	}
+}
+
+/* The video column is exactly as wide as the largest player that fits, so video and panel centre as a pair */
+.review-layout
+{
+	--panel-w: clamp(480px, 25vw, 580px);
+	--scrub-h: 24px;
+	--buttons-h: 30px;
+	--controls-h: calc(var(--scrub-h) + var(--buttons-h));
+	--video-ratio: 16 / 9;
+	--player-w: min(100cqw - var(--panel-w) - var(--space-l), (100cqh - var(--controls-h)) * var(--video-ratio));
+
+	flex: 1;
+	min-height: 0;
+	display: grid;
+	grid-template-columns: var(--player-w) var(--panel-w);
+	grid-template-rows: minmax(0, 1fr);
+	justify-content: center;
+	gap: var(--space-l);
+}
+
+.video-column {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	min-height: 0;
+}
+
+.videocontainer {
+	position: relative;
+	isolation: isolate;
+	width: var(--player-w);
+	height: calc(var(--player-w) / (var(--video-ratio)) + var(--controls-h));
+}
+
+/* Spills past the picture so the glow shows around the opaque player. A canvas needs an explicit size to stretch. */
+.video-glow {
+	--spill: 32px;
+
+	position: absolute;
+	top: calc(-1 * var(--spill));
+	left: calc(-1 * var(--spill));
+	width: calc(100% + 2 * var(--spill));
+	height: calc(100% - var(--controls-h) + 2 * var(--spill));
+	z-index: -1;
+	filter: blur(64px);
+	opacity: 0.35;
+	pointer-events: none;
+}
+
+/* Video.js, restyled to match the panel, with the controls below the picture */
+.video-js {
+	background-color: var(--bg-panel);
+	border-radius: var(--shape-m);
+
+	& .vjs-tech {
+		height: calc(100% - var(--controls-h));
+		object-fit: contain;
+		border-radius: var(--shape-m) var(--shape-m) 0px 0px;
+	}
+
+	& .vjs-big-play-button {
+		top: calc(50% - var(--controls-h) / 2);
+		width: 1.6em;
+		height: 1.6em;
+		line-height: 1.6em;
+		margin-left: -0.8em;
+		margin-top: -0.8em;
+		background-color: rgba(0, 0, 0, 0.6);
+		border: none;
+		border-radius: var(--shape-full);
+	}
+
+	&:hover .vjs-big-play-button,
+	& .vjs-big-play-button:focus {
+		background-color: rgba(0, 0, 0, 0.8);
+	}
+
+	/* Metamodel: explains the rules over the blurred, dimmed picture until the reviewer starts the match.
+	   Clicks outside the card fall through to the video, which also starts it. */
+	& .vjs-start-message {
+		position: absolute;
+		inset: 0px 0px var(--controls-h);
+		display: grid;
+		place-items: center;
+		padding: var(--space-xl);
+		background-color: rgba(0, 0, 0, 0.55);
+		backdrop-filter: blur(16px);
+		border-radius: var(--shape-m) var(--shape-m) 0px 0px;
+		pointer-events: none;
+
+		& .card {
+			display: flex;
+			flex-direction: column;
+			gap: var(--space-l);
+			box-sizing: border-box;
+			max-width: 560px;
+			max-height: 100%;
+			overflow-y: auto;
+			padding: var(--space-xl);
+			text-align: left;
+			pointer-events: auto;
+		}
+
+		& h2 {
+			margin: 0px;
+			font: var(--type-headline-s);
+			color: var(--text);
+		}
+
+		& ul {
+			display: flex;
+			flex-direction: column;
+			gap: var(--space-m);
+			margin: 0px;
+			padding-left: 20px;
+			font: var(--type-body-l);
+			color: var(--text);
+		}
+
+		& button {
+			align-self: end;
+			display: flex;
+			align-items: center;
+			gap: var(--space-s);
+			height: 40px;
+			padding: 0px 24px 0px 16px;
+			font: var(--type-label-l);
+			color: var(--text);
+			background-color: var(--accent);
+			border-radius: var(--shape-full);
+			cursor: pointer;
+
+			&:hover {
+				background-image: var(--state-hover);
+			}
+
+			&:focus-visible {
+				outline: 2px solid var(--text);
+				outline-offset: 2px;
+			}
+
+			/* A 20px box with the glyph filling it, so the icon centres like the label */
+			& .vjs-icon-play {
+				font-size: 20px;
+				line-height: 1;
+
+				&::before {
+					display: block;
+				}
+			}
+		}
+	}
+
+	&.vjs-has-started .vjs-start-message,
+	&.vjs-metamodel:not(.vjs-has-started) .vjs-big-play-button {
+		display: none;
+	}
+
+	&.vjs-metamodel:not(.vjs-has-started) .vjs-progress-control,
+	&.vjs-play-locked .vjs-play-control {
+		opacity: 0.38;
+		pointer-events: none;
+	}
+
+	/* scrub bar along the top, one row of buttons beneath it */
+	& .vjs-control-bar {
+		display: flex;
+		align-items: flex-end;
+		box-sizing: border-box;
+		height: var(--controls-h);
+		padding-top: var(--scrub-h);
+		background-color: var(--bg-panel);
+		border-radius: 0px 0px var(--shape-m) var(--shape-m);
+	}
+
+	& .vjs-control-bar > .vjs-control:not(.vjs-progress-control) {
+		height: var(--buttons-h);
+	}
+
+	& .vjs-button:hover {
+		background-image: var(--state-hover);
+		border-radius: var(--shape-full);
+	}
+
+	& .vjs-control:focus-visible {
+		outline: 2px solid var(--text);
+		outline-offset: -2px;
+		border-radius: var(--shape-full);
+		text-shadow: none;
+	}
+
+	& .vjs-time-control {
+		min-width: 0;
+		padding: 0px;
+		font-family: var(--font-body);
+		font-variant-numeric: tabular-nums;
+	}
+
+	& .vjs-custom-control-spacer {
+		display: block;
+		flex: auto;
+	}
+
+	& .vjs-picture-in-picture-control { display: none; }
+
+	& .vjs-menu-content {
+		background-color: var(--bg-inset);
+		border-radius: var(--shape-s);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+	}
+
+	& .vjs-progress-control {
+		position: absolute;
+		inset: 0px 0px auto;
+		width: auto;
+		height: var(--scrub-h);
+		padding: 0px 8px;
+		box-sizing: border-box;
+	}
+
+	& .vjs-slider { background-color: var(--border); }
+	& .vjs-load-progress,
+	& .vjs-load-progress div { background: var(--border); }
+
+	/* metamodel: how much of the match has been watched, shown in place of the buffered bar */
+	& .vjs-watched-progress {
+		position: absolute;
+		inset: 0px auto 0px 0px;
+		background-color: var(--outline);
+		pointer-events: none;
+	}
+
+	& .vjs-progress-holder:has(.vjs-watched-progress) .vjs-load-progress { display: none; }
+
+	/* metamodel: the moment "Mark Cheating" was chosen */
+	& .vjs-cheating-marker {
+		position: absolute;
+		z-index: 2;
+		top: 50%;
+		box-sizing: border-box;
+		width: 14px;
+		height: 14px;
+		transform: translate(-50%, -50%);
+		background-color: var(--positive);
+		border: 2px solid var(--bg-panel);
+		border-radius: var(--shape-full);
+		pointer-events: none;
+
+		&[hidden] { display: none; }
+	}
+}
+
+/* [VO] live playback position, shown over metamodel clips in the internal view */
+.tickcounter {
+	position: absolute;
+	top: var(--space-s);
+	left: var(--space-s);
+	z-index: 1;
+	padding: 2px var(--space-s);
+	border-radius: var(--shape-s);
+	background-color: rgba(0, 0, 0, 0.6);
+	color: var(--text-muted);
+	font: var(--type-label-m);
+	font-variant-numeric: tabular-nums;
+	pointer-events: none;
+}
+
+.verdict-column {
+	position: relative; /* above the video glow */
+	align-self: start;
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	max-height: 100%;
+	overflow-y: auto;
+	box-sizing: border-box;
+	padding: var(--space-l);
+	text-align: left;
+	background:
+		linear-gradient(to bottom, transparent, var(--bg-panel) 240px) local,
+		linear-gradient(272deg, rgba(211, 95, 183, 0.16), rgba(93, 185, 210, 0.16)) local,
+		var(--bg-panel);
+	border-radius: var(--shape-l);
+	scrollbar-width: thin;
+	scrollbar-color: var(--bg-control) transparent;
+
+	&:hover {
+		scrollbar-color: var(--bg-control-hover) transparent;
+	}
+}
+
+.panel-header {
+	display: flex;
+	align-items: center;
+	gap: var(--space-l);
+}
+
+.panel-logo {
+	flex: 1;
+	height: 28px;
+	background: url(https://cdn.[CDN].steamstatic.com/apps/csgo/images/vacnet_logo.svg) no-repeat left center / contain;
+}
+
+.panel-clipcount {
+	margin: 0px;
+	white-space: nowrap;
+	font: var(--type-body-m);
+	color: var(--text-muted);
+	font-variant-numeric: tabular-nums;
+
+	& b {
+		font: var(--type-label-l);
+		color: var(--text);
+	}
+}
+
+.task-instructions {
+	padding: var(--space-xl) 0px;
+	border-bottom: 1px solid var(--border);
+
+	& .task-title {
+		margin: 0px;
+		font: var(--type-title-s);
+	}
+
+	& .task-guidelines {
+		margin: var(--space-s) 0px 0px;
+		padding-left: 20px;
+		font: var(--type-body-s);
+		color: var(--text-muted);
+
+		& li { margin-top: var(--space-s); }
+	}
+}
+
+.verdict-block {
+	padding: var(--space-l) 0px;
+	border-bottom: 1px solid var(--border);
+
+	&:last-child {
+		border-bottom: none;
+	}
+
+	& .verdict-desc {
+		margin: 0px;
+		font: var(--type-body-s);
+		color: var(--text-muted);
+
+		& strong {
+			color: var(--text);
+		}
+	}
+
+	/* Explains the verdicts that are locked until the match has been watched. */
+	& .verdict-lock-hint {
+		margin: var(--space-s) 0px 0px;
+		font: var(--type-body-s);
+		color: var(--text-muted);
+		text-align: right;
+	}
+}
+
+.verdictbuttons {
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+	margin-top: var(--space-s);
+	border: 1px solid var(--outline);
+	border-radius: var(--shape-full);
+	overflow: hidden;
+}
+
+.verdictbutton {
+	display: flex;
+	min-height: 40px;
+	font: var(--type-label-l);
+
+	& + .verdictbutton {
+		border-left: 1px solid var(--outline);
+	}
+
+	& label {
+		flex: 1;
+		align-content: center;
+		padding: 4px 12px;
+		text-align: center;
+		text-wrap: balance;
+		cursor: pointer;
+		user-select: none;
+		transition: opacity 0.15s;
+	}
+
+	& input[type="radio"] {
+		display: none;
+	}
+
+	&:hover {
+		background-image: var(--state-hover);
+	}
+
+	&:has(input:checked) {
+		background-color: var(--bg-control-hover);
+	}
+
+	&.positive:has(input:checked) {
+		background-color: var(--positive-container);
+	}
+
+	&.negative:has(input:checked) {
+		background-color: var(--negative-container);
+	}
+
+	&:is(.positive, .negative):has(input:checked) :is(.highlight-text, .highlight-text-negative) {
+		color: var(--text);
+	}
+}
+
+.highlight-text { color: var(--positive); font-weight: bold; }
+.highlight-text-negative { color: var(--negative); font-weight: bold; }
+
+.verdict-column.confirming .verdictbuttons {
+	pointer-events: none;
+	border-color: var(--border);
+
+	& .verdictbutton + .verdictbutton {
+		border-left-color: var(--border);
+	}
+}
+
+/* Unavailable verdicts: locked until the match is watched, or not chosen while confirming. */
+.verdictbutton:has(input:disabled),
+.verdict-column.confirming .verdictbutton:not(:has(input:checked)) {
+	pointer-events: none;
+
+	& label {
+		opacity: 0.38;
+	}
+}
+
+.submitbuttons {
+	display: flex;
+	justify-content: end;
+	gap: var(--space-m);
+	padding-top: var(--space-xl);
+	padding-bottom: var(--space-l);
+	border-top: 1px solid var(--border);
+
+	& .submithint {
+		margin: 0px auto 0px 0px;
+		align-self: center;
+		font: var(--type-body-m);
+		color: var(--text-muted);
+		transition: opacity 0.5s;
+
+		&.success {
+			color: var(--accent);
+
+			&::before {
+				content: "\2713\00a0";
+			}
+		}
+
+		&.fade {
+			opacity: 0;
+		}
+
+		/* the verdict waiting to be confirmed, dotted in its button's colour */
+		&[data-verdict] {
+			display: flex;
+			align-items: center;
+			gap: var(--space-s);
+			font: var(--type-label-l);
+			font-variant-numeric: tabular-nums;
+			color: var(--text);
+
+			&::before {
+				content: "";
+				flex-shrink: 0;
+				width: 8px;
+				height: 8px;
+				border-radius: var(--shape-full);
+				background-color: var(--text-muted);
+			}
+		}
+
+		&[data-verdict="positive"]::before { background-color: var(--positive); }
+		&[data-verdict="negative"]::before { background-color: var(--negative); }
+	}
+}
+
+.submitverdictbutton,
+.backbutton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 120px;
+	height: 40px;
+	padding: 0px 24px;
+	font: var(--type-label-l);
+	color: var(--text);
+	background-color: var(--accent);
+	border: none;
+	border-radius: var(--shape-full);
+	cursor: pointer;
+	transition: box-shadow 0.15s, color 0.15s;
+
+	&:hover {
+		background-image: var(--state-hover);
+	}
+
+	&:active {
+		background-image: var(--state-pressed);
+	}
+
+	&:disabled {
+		color: var(--text-disabled);
+		background-color: var(--border);
+		background-image: none;
+		box-shadow: none;
+		cursor: default;
+	}
+}
+
+.submitverdictbutton:hover:not(:disabled) {
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+}
+
+/* Confirm fills in before it can be clicked, so a double-click can't submit by accident */
+.submitverdictbutton.arming {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
+
+	&::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background-color: var(--accent);
+		transform-origin: left;
+		animation: arm-confirm 0.7s linear forwards;
+	}
+}
+
+@keyframes arm-confirm {
+	from { transform: scaleX(0); }
+	to { transform: scaleX(1); }
+}
+
+.backbutton {
+	background-color: transparent;
+	border: 1px solid var(--outline);
+}
+
+:is(.submitverdictbutton, .backbutton, .invitebutton, .PageHeader .right a):focus-visible {
+	outline: 2px solid var(--text);
+	outline-offset: 2px;
+}
+
+.vaclive-logo {
+	width: 520px;
+	height: 64px;
+	margin: 16px auto;
+	background-image: linear-gradient(272deg, rgba(211, 95, 183, 0.20) -0.75%, rgba(93, 185, 210, 0.20) 99.83%),url(https://cdn.[CDN].steamstatic.com/apps/csgo/images/vacnet_logo.svg);
+	background-repeat: no-repeat;
+	background-position: center;
+	border-radius: 8px;
+	margin-bottom: 1em;
+}
+
+.intro-text-container
+{
+	display: flex;
+	margin: 0px auto;
+	flex-direction: column;
+	width: 480px;
+	background-color: var(--bg-panel);
+	padding: 20px;
+	border-radius: 8px;
+
+	& .intro-text-p{
+		margin: auto;
+		padding: 10px;
+		text-align: left;
+		color: var(--text-muted);
+	}
+
+	textarea
+	{
+		resize: none;
+		color: black;
+		background-color: rgb(209, 209, 209);
+	}
+}
+
+.invite-link-p {
+	font-family: 'Courier New', Courier, monospace;
+	font-size: 14px;
+	font-weight: bold;
+	background-color: #000000;
+	border-radius: 8px;
+	padding: 8px 16px;
+	text-align: left;
+}
+
+.datasourcetable { margin-left: auto; margin-right: auto; text-align: center; vertical-align: middle; }
+.errormessage { color: red; font-size: 20px; margin: 10px auto; }
+.infomessage { color: white; font-size: 14px; margin: 10px auto; }
+
+.detailsbutton {
+	margin: 5px 5px auto;
+	background-color:var(--bg-control);
+	color: var(--text);
+	border: 1px solid var(--border);
+	padding: 6px 16px;
+	border-radius: 3px;
+
+	transition-property: background-color;
+	transition-duration: 0.1s;
+}
+
+.detailsbutton:hover {
+	background-color:var(--bg-control-hover);
+}
+
+.detailstable { border-collapse: collapse; margin: 0 auto; color: var(--text); }
+.detailstable th, .detailstable td { border: 1px solid var(--border); padding: 4px 10px; text-align: left; }
+.detailstable td:first-child { color: var(--text-muted); }
+
+th {
+	font-weight: normal;
+	font-size: 13px;
+	text-transform: uppercase;
+	color:var(--text-muted);
+	letter-spacing: 1px;
+}
+
+.SecondaryButton,
+.CopyToClipboardButton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100px;
+	height: 40px;
+	gap: 8px;
+	font-size: 18px;
+	font-weight: bold;
+	background-color: var(--accent);
+	color: var(--text);
+	border: none;
+	border-radius: 4px;
+}
+
+.SecondaryButton {
+	background-color: var(--bg-control);
+	color: var(--text);
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.CopyToClipboardButton {
+	text-decoration: none;
+	height: 40px;
+	width: 160px;
+	padding: 0px 8px;
+	color: var(--text);
+	margin: 10px auto 0px;
+}
+
+.CopyToClipboardButton:hover,
+.SecondaryButton:hover {
+	filter: brightness(1.2);
+}
+
+.invitebutton {
+	display: flex;
+	align-items: center;
+	box-sizing: border-box;
+	height: 32px;
+	padding: 0px var(--space-l);
+	font: var(--type-label-l);
+	white-space: nowrap;
+	color: var(--text);
+	border: 1px solid var(--outline);
+	border-radius: var(--shape-full);
+	text-decoration: none;
+
+	&:hover {
+		background-image: var(--state-hover);
+	}
+
+	&.disabled {
+		color: var(--text-disabled);
+		border-color: var(--border);
+		background-image: none;
+		cursor: not-allowed;
+	}
+}
+
+.footer-container
+{
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	align-content: center;
+	justify-content: center;
+	background-color: var(--bg-panel);
+	padding: 12px 0px;
+	z-index: 100;
+
+	& .footer-buttons
+	{
+		display: flex;
+		gap: 1.4em;
+		justify-content: center;
+		align-content: center;
+		margin-bottom: 6px;
+	}
+
+	& p {
+		margin: 0px;
+		color: var(--text-muted);
+		font-size: 12px;
+	}
+}
+
+.modaloverlay { background-color: rgba(0, 0, 0, 0.6); display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;  z-index: 100; }
+.modalcontent { color: var(--text); background: var(--bg-panel); position: absolute; left: 50%; top: 250px; transform: translate(-50%, 0%); display: inline-block; border: 1px solid var(--border); padding: 16px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); border-radius: var(--shape-xl); }
+.modalheader { background-color: var(--bg-inset); color: var(--text); text-align: center; display: flex; align-items: center; justify-content: center; cursor: move; font-weight: bold; height: 30px; margin-bottom: 12px; border-radius: var(--shape-m); font-size: 14px }
+.modalclosebutton { position: absolute; right: 26px; cursor: pointer; font-size: 24px; }
+.modalclosebutton:hover { filter: brightness(1.2); transform: scale(1.02); }
+
+.evidencelog { font-family: 'Courier New', Courier, monospace; font-weight: bold; font-size: 12px; white-space: nowrap; }
+#copybutton { background-color: var(--bg-control); color: var(--text); border: none; border-radius: var(--shape-full); padding: 6px 16px; display: block; margin: 0 auto; }
+#copybutton:hover:enabled { filter: brightness(1.2); transform: scale(1.02); }
+#copiedMessage { display: none; margin-left: 10px; color: var(--accent); }
+
+.PageHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-bottom: 1px solid var(--border);
+	background-color: #00000030;
+	padding: var(--space-m) var(--space-l);
+}
+
+.PageHeader .right {
+	margin-left: auto;
+	display: flex;
+	align-items: center;
+	gap: var(--space-l);
+	font: var(--type-body-m);
+
+	& p {
+		display: flex;
+		align-items: center;
+		gap: var(--space-xs);
+		margin: 0px;
+	}
+
+	& a:not(.invitebutton) {
+		display: inline-flex;
+		align-items: center;
+		height: 32px;
+		padding: 0px var(--space-m);
+		border-radius: var(--shape-full);
+		font: var(--type-label-l);
+		color: var(--text-muted);
+		text-decoration: none;
+
+		&:hover {
+			color: var(--text);
+			background-image: var(--state-hover);
+		}
+	}
+
+	& .ClipCount {
+		font: var(--type-label-l);
+		font-variant-numeric: tabular-nums;
+
+		& b {
+			font: var(--type-body-m);
+			color: var(--text-muted);
+		}
+	}
+}
+
+.PageTitle {
+	font-size: 2em;
+	font-weight: bold;
+	margin-top: 3px;
+}
+
+.CSLogo {
+	width: 80px;
+	align-self: center;
+}
+
+.perf_timing_area {
+	display: none;
+}
+
+.intro-page-button {
+	margin:32px auto;
+	display: flex;
+	justify-content: center;
+}
+
+
+.intro-page-button-small {
+	margin:8px auto;
+	display: flex;
+	justify-content: center;
+}

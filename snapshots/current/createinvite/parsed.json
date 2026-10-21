@@ -1,0 +1,157 @@
+{
+  "schema_version": 2,
+  "variant": "",
+  "_meta": {
+    "url": "https://www.counter-strike.net/vacnet/createinvite",
+    "fetched_at": "2026-10-21T18:25:20.760314+00:00",
+    "html_bytes": 1641,
+    "html_sha256": "b638c44790effc678f4dc949e0a16d6ff4c6481c83f693ba7982a0286e46a913"
+  },
+  "assets": [
+    {
+      "url": "https://cdn.[CDN].steamstatic.com/apps/csgo/images/csgo_react/global/logo_cs_sm.svg",
+      "status": 200,
+      "sha256": "7744cfe4db73e0acf8eb8d5bc27b2570970340dbf523680ec13e29d21170336c",
+      "bytes": 6202
+    },
+    {
+      "url": "https://vjs.zencdn.net/vttjs/0.14.1/vtt.min.js",
+      "status": 200,
+      "sha256": "5a36011812516a45305217c2fc2d0a0b2fcf9e66e4c84708cc1b6818066024fc",
+      "bytes": 20225
+    },
+    {
+      "url": "https://www.counter-strike.net/public/css/csgo.css?l=english",
+      "status": 200,
+      "sha256": "8a5222a7724fd87e532ceecaf27c62dde3fd3197218f0d24b1321e9e12b6bb4f",
+      "bytes": 2770
+    },
+    {
+      "url": "https://www.counter-strike.net/public/css/videoreview.css?l=english",
+      "status": 200,
+      "sha256": "7326cde91ee889058bca3493dfa68cb0aae745024bec5aa643f307e5a9eac1e8",
+      "bytes": 21172
+    },
+    {
+      "url": "https://www.counter-strike.net/public/shared/css/video-js/video-js-8.23.3.css?l=english",
+      "status": 200,
+      "sha256": "30def08224fc4daa8cae2ecb273144d55939c50f0830aa77cb9c0c94da0dd497",
+      "bytes": 54292
+    },
+    {
+      "url": "https://www.counter-strike.net/public/shared/javascript/jquery-1.8.3.min.js?l=english",
+      "status": 200,
+      "sha256": "61c6caebd23921741fb5ffe6603f16634fca9840c2bf56ac8201e9264d6daccf",
+      "bytes": 93636
+    },
+    {
+      "url": "https://www.counter-strike.net/public/shared/javascript/video-8.23.3.novtt.min.js?l=english",
+      "status": 200,
+      "sha256": "11fe035f3290e0f1b79a484ba429e9bed5662f232fb2145d1b100bce568acab1",
+      "bytes": 668400
+    }
+  ],
+  "asset_errors": [],
+  "inline_resources": [
+    {
+      "tag": "script",
+      "sha256": "544baa1691b99c9af31a94a33325971f6f91973af6aa95aff558b1757cf20cb1",
+      "bytes": 25
+    }
+  ],
+  "dom": {
+    "tag": "body",
+    "children": [
+      {
+        "tag": "div",
+        "attrs": {
+          "class": "PageBackground"
+        }
+      },
+      {
+        "tag": "div",
+        "attrs": {
+          "class": "PageHeader"
+        },
+        "children": [
+          {
+            "tag": "img",
+            "attrs": {
+              "class": "CSLogo",
+              "src": "https://cdn.[CDN].steamstatic.com/apps/csgo/images/csgo_react/global/logo_cs_sm.svg"
+            }
+          },
+          {
+            "tag": "p",
+            "children": [
+              {
+                "tag": "a",
+                "attrs": {
+                  "href": "https://www.counter-strike.net/vacnet/clips"
+                },
+                "children": [
+                  {
+                    "text": "Login"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tag": "div",
+        "attrs": {
+          "class": "PageContents"
+        },
+        "children": [
+          {
+            "tag": "div",
+            "attrs": {
+              "class": "vaclive-logo"
+            }
+          },
+          {
+            "tag": "div",
+            "attrs": {
+              "class": "intro-text-container"
+            },
+            "children": [
+              {
+                "tag": "p",
+                "attrs": {
+                  "class": "intro-text-p"
+                },
+                "children": [
+                  {
+                    "text": "[INVITE_INTRO_TEXT]"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tag": "p",
+            "attrs": {
+              "class": "intro-page-button"
+            },
+            "children": [
+              {
+                "tag": "a",
+                "attrs": {
+                  "class": "SecondaryButton",
+                  "href": "https://www.counter-strike.net/vacnet/clips"
+                },
+                "children": [
+                  {
+                    "text": "Done"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

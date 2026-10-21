@@ -1,0 +1,609 @@
+{
+  "schema_version": 2,
+  "variant": "full_match",
+  "_meta": {
+    "url": "https://www.counter-strike.net/vacnet/clips",
+    "fetched_at": "2026-10-21T18:25:17.702020+00:00",
+    "html_bytes": 21907,
+    "html_sha256": "e21d2e16d64da2fbbc1e67bbf8c37136e51a03bfd7215d17dc041af4066623d7"
+  },
+  "assets": [
+    {
+      "url": "https://cdn.[CDN].steamstatic.com/apps/csgo/images/csgo_react/global/logo_cs_sm.svg",
+      "status": 200,
+      "sha256": "7744cfe4db73e0acf8eb8d5bc27b2570970340dbf523680ec13e29d21170336c",
+      "bytes": 6202
+    },
+    {
+      "url": "https://vjs.zencdn.net/vttjs/0.14.1/vtt.min.js",
+      "status": 200,
+      "sha256": "5a36011812516a45305217c2fc2d0a0b2fcf9e66e4c84708cc1b6818066024fc",
+      "bytes": 20225
+    },
+    {
+      "url": "https://www.counter-strike.net/public/css/csgo.css?l=english",
+      "status": 200,
+      "sha256": "8a5222a7724fd87e532ceecaf27c62dde3fd3197218f0d24b1321e9e12b6bb4f",
+      "bytes": 2770
+    },
+    {
+      "url": "https://www.counter-strike.net/public/css/videoreview.css?l=english",
+      "status": 200,
+      "sha256": "7326cde91ee889058bca3493dfa68cb0aae745024bec5aa643f307e5a9eac1e8",
+      "bytes": 21172
+    },
+    {
+      "url": "https://www.counter-strike.net/public/shared/css/video-js/video-js-8.23.3.css?l=english",
+      "status": 200,
+      "sha256": "30def08224fc4daa8cae2ecb273144d55939c50f0830aa77cb9c0c94da0dd497",
+      "bytes": 54292
+    },
+    {
+      "url": "https://www.counter-strike.net/public/shared/javascript/jquery-1.8.3.min.js?l=english",
+      "status": 200,
+      "sha256": "61c6caebd23921741fb5ffe6603f16634fca9840c2bf56ac8201e9264d6daccf",
+      "bytes": 93636
+    },
+    {
+      "url": "https://www.counter-strike.net/public/shared/javascript/video-8.23.3.novtt.min.js?l=english",
+      "status": 200,
+      "sha256": "11fe035f3290e0f1b79a484ba429e9bed5662f232fb2145d1b100bce568acab1",
+      "bytes": 668400
+    }
+  ],
+  "asset_errors": [],
+  "inline_resources": [
+    {
+      "tag": "script",
+      "sha256": "544baa1691b99c9af31a94a33325971f6f91973af6aa95aff558b1757cf20cb1",
+      "bytes": 25
+    },
+    {
+      "tag": "script",
+      "sha256": "1cd919f06dec35e7f0eccd8ae70e16f84d637599bf8db9c4f603a83e8bfaefea",
+      "bytes": 1612
+    },
+    {
+      "tag": "script",
+      "sha256": "5f39d2976a6e1dc208ddeacb78bca568dfbcfc97e9b8b25145a25462ac7e25f0",
+      "bytes": 3543
+    },
+    {
+      "tag": "script",
+      "sha256": "ab8e8515f7e89ee000f66a7d9e1850b2a29c14dbb50d10456ef762df1087008a",
+      "bytes": 1577
+    },
+    {
+      "tag": "script",
+      "sha256": "a5789db96cb07611667f4d53515352c4a5547f72edb7b2445b9d57524f8532d8",
+      "bytes": 5373
+    },
+    {
+      "tag": "script",
+      "sha256": "5739397986f21367d8cae60e7d2011115fd7f2b3da306e6406b4167fc387830a",
+      "bytes": 1371
+    }
+  ],
+  "dom": {
+    "tag": "body",
+    "children": [
+      {
+        "tag": "div",
+        "attrs": {
+          "class": "PageBackground"
+        }
+      },
+      {
+        "tag": "div",
+        "attrs": {
+          "class": "PageHeader"
+        },
+        "children": [
+          {
+            "tag": "img",
+            "attrs": {
+              "class": "CSLogo",
+              "src": "https://cdn.[CDN].steamstatic.com/apps/csgo/images/csgo_react/global/logo_cs_sm.svg"
+            }
+          },
+          {
+            "tag": "div",
+            "attrs": {
+              "class": "right"
+            },
+            "children": [
+              {
+                "tag": "a",
+                "attrs": {
+                  "class": "invitebutton",
+                  "href": "[INVITE_ENDPOINT]"
+                },
+                "children": [
+                  {
+                    "text": "Invite Reviewers"
+                  }
+                ]
+              },
+              {
+                "tag": "p",
+                "attrs": {
+                  "class": "ClipCount"
+                },
+                "children": [
+                  {
+                    "tag": "b",
+                    "children": [
+                      {
+                        "text": "Clips Labeled"
+                      }
+                    ]
+                  },
+                  {
+                    "text": "[CLIP_COUNT]"
+                  }
+                ]
+              },
+              {
+                "tag": "p",
+                "children": [
+                  {
+                    "text": "󠀡"
+                  },
+                  {
+                    "tag": "a",
+                    "attrs": {
+                      "href": "[AUTH_ENDPOINT]"
+                    },
+                    "children": [
+                      {
+                        "text": "Logout"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tag": "div",
+        "attrs": {
+          "class": "page-container"
+        },
+        "children": [
+          {
+            "tag": "div",
+            "attrs": {
+              "class": "review-layout"
+            },
+            "children": [
+              {
+                "tag": "div",
+                "attrs": {
+                  "class": "video-column"
+                },
+                "children": [
+                  {
+                    "tag": "div",
+                    "attrs": {
+                      "class": "videocontainer"
+                    },
+                    "children": [
+                      {
+                        "tag": "video",
+                        "attrs": {
+                          "class": "video-js vjs-big-play-centered vjs-fill vjs-normalise-time-controls",
+                          "controls": "",
+                          "data-setup": "{\"playbackRates\": [0.1, 0.2, 0.4, 0.75, 1.0], \"inactivityTimeout\": 0 }",
+                          "height": "1080",
+                          "id": "video",
+                          "loading": "lazy",
+                          "playsinline": "true",
+                          "preload": "metadata",
+                          "width": "1920"
+                        },
+                        "children": [
+                          {
+                            "tag": "source",
+                            "attrs": {
+                              "src": "https://replay-video.valve.net/cs_overwatch/cl_[CLIP_HASH].webm",
+                              "type": "video/webm"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tag": "div",
+                "attrs": {
+                  "class": "verdict-column"
+                },
+                "children": [
+                  {
+                    "tag": "div",
+                    "attrs": {
+                      "class": "panel-header"
+                    },
+                    "children": [
+                      {
+                        "tag": "div",
+                        "attrs": {
+                          "aria-label": "VACNet",
+                          "class": "panel-logo",
+                          "role": "img"
+                        }
+                      },
+                      {
+                        "tag": "p",
+                        "attrs": {
+                          "class": "panel-clipcount"
+                        },
+                        "children": [
+                          {
+                            "tag": "b",
+                            "children": [
+                              {
+                                "text": "[CLIP_COUNT]"
+                              }
+                            ]
+                          },
+                          {
+                            "text": "Clips Labeled"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "section",
+                    "attrs": {
+                      "class": "task-instructions"
+                    },
+                    "children": [
+                      {
+                        "tag": "h3",
+                        "attrs": {
+                          "class": "task-title"
+                        },
+                        "children": [
+                          {
+                            "text": "Please watch the match from the start."
+                          }
+                        ]
+                      },
+                      {
+                        "tag": "ul",
+                        "attrs": {
+                          "class": "task-guidelines"
+                        },
+                        "children": [
+                          {
+                            "tag": "li",
+                            "children": [
+                              {
+                                "text": "Select \"Mark Cheating\" as soon as you're sure beyond a reasonable doubt."
+                              }
+                            ]
+                          },
+                          {
+                            "tag": "li",
+                            "children": [
+                              {
+                                "text": "The moment you select \"Mark Cheating\" is important and recorded."
+                              }
+                            ]
+                          },
+                          {
+                            "tag": "li",
+                            "children": [
+                              {
+                                "text": "No clear evidence by the end? Select \"No Cheating Seen.\""
+                              }
+                            ]
+                          },
+                          {
+                            "tag": "li",
+                            "children": [
+                              {
+                                "text": "Your verdict doesn't affect this player."
+                              }
+                            ]
+                          },
+                          {
+                            "tag": "li",
+                            "children": [
+                              {
+                                "text": "Every verdict is equally useful for training future VACNet models."
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "div",
+                    "attrs": {
+                      "class": "verdicts-container"
+                    },
+                    "children": [
+                      {
+                        "tag": "div",
+                        "attrs": {
+                          "class": "verdict-block"
+                        },
+                        "children": [
+                          {
+                            "tag": "p",
+                            "attrs": {
+                              "class": "verdict-desc"
+                            },
+                            "children": [
+                              {
+                                "text": "Is the Subject cheating"
+                              },
+                              {
+                                "tag": "strong",
+                                "children": [
+                                  {
+                                    "text": "beyond a reasonable doubt"
+                                  }
+                                ]
+                              },
+                              {
+                                "text": "? Answer"
+                              },
+                              {
+                                "tag": "strong",
+                                "children": [
+                                  {
+                                    "text": "as soon as you're sure"
+                                  }
+                                ]
+                              },
+                              {
+                                "text": "."
+                              }
+                            ]
+                          },
+                          {
+                            "tag": "div",
+                            "attrs": {
+                              "class": "verdictbuttons",
+                              "id": "verdictbuttons_cheating"
+                            }
+                          },
+                          {
+                            "tag": "p",
+                            "attrs": {
+                              "class": "verdict-lock-hint"
+                            },
+                            "children": [
+                              {
+                                "text": "Watch to the end to choose Uncertain and No Cheating Seen."
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "div",
+                    "attrs": {
+                      "class": "submitbuttons",
+                      "id": "submitbuttons"
+                    }
+                  },
+                  {
+                    "tag": "form",
+                    "attrs": {
+                      "action": "/vacnet/submit?",
+                      "id": "submitverdictform",
+                      "method": "POST"
+                    },
+                    "children": [
+                      {
+                        "tag": "input",
+                        "attrs": {
+                          "name": "verdict_task",
+                          "type": "hidden",
+                          "value": "[DYNAMIC_VALUE]"
+                        }
+                      },
+                      {
+                        "tag": "input",
+                        "attrs": {
+                          "id": "form_verdict_tick",
+                          "name": "verdict_tick",
+                          "type": "hidden"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tag": "div",
+        "attrs": {
+          "class": "modaloverlay",
+          "id": "detailsModalOverlay"
+        },
+        "children": [
+          {
+            "tag": "div",
+            "attrs": {
+              "class": "modalcontent",
+              "id": "detailsModalContent"
+            },
+            "children": [
+              {
+                "tag": "div",
+                "attrs": {
+                  "class": "modalheader",
+                  "id": "detailsModalHeader"
+                },
+                "children": [
+                  {
+                    "text": "Clip Details"
+                  },
+                  {
+                    "tag": "span",
+                    "attrs": {
+                      "class": "modalclosebutton",
+                      "id": "closeDetailsButton"
+                    },
+                    "children": [
+                      {
+                        "text": "X"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tag": "div",
+                "children": [
+                  {
+                    "tag": "table",
+                    "attrs": {
+                      "class": "detailstable"
+                    },
+                    "children": [
+                      {
+                        "tag": "tr",
+                        "children": [
+                          {
+                            "tag": "td",
+                            "children": [
+                              {
+                                "text": "Task ID"
+                              }
+                            ]
+                          },
+                          {
+                            "tag": "td",
+                            "children": [
+                              {
+                                "tag": "a",
+                                "attrs": {
+                                  "href": "https://www.counter-strike.net/vacnet/view?s=[TASK_TOKEN]"
+                                },
+                                "children": [
+                                  {
+                                    "text": "[TASK_ID]"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "tag": "tr",
+                        "children": [
+                          {
+                            "tag": "td",
+                            "children": [
+                              {
+                                "text": "App"
+                              }
+                            ]
+                          },
+                          {
+                            "tag": "td",
+                            "children": [
+                              {
+                                "text": "730"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "tag": "tr",
+                        "children": [
+                          {
+                            "tag": "td",
+                            "children": [
+                              {
+                                "text": "Match ID"
+                              }
+                            ]
+                          },
+                          {
+                            "tag": "td",
+                            "children": [
+                              {
+                                "text": "none"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tag": "footer",
+        "attrs": {
+          "class": "footer-container"
+        },
+        "children": [
+          {
+            "tag": "div",
+            "attrs": {
+              "class": "footer-buttons"
+            },
+            "children": [
+              {
+                "tag": "a",
+                "attrs": {
+                  "class": "mail-to",
+                  "href": "mailto:cs2team@valvesoftware.com?subject=Video+Labeling+Feedback"
+                },
+                "children": [
+                  {
+                    "text": "Send Feedback"
+                  }
+                ]
+              },
+              {
+                "tag": "a",
+                "attrs": {
+                  "href": "https://www.counter-strike.net/vacnet/clips"
+                },
+                "children": [
+                  {
+                    "text": "Report Bad Clip"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tag": "p",
+            "children": [
+              {
+                "text": "Counter-Strike, Counter-Strike 2, CS:GO, and their respective logos are trademarks and/or registered trademarks of Valve Corporation. © 2023 Valve Corporation, all rights reserved."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

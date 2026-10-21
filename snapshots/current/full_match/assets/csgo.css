@@ -1,0 +1,127 @@
+
+img {
+	border:0;
+}
+a,a:visited,a:active,a:hover {
+	color:#aaaaaa;
+	text-decoration:none;
+}
+a:hover {
+	color:#ffffff;
+}
+body {
+	font-family: Calibri, Candara, Segoe, Geneva, Tahoma, Arial, sans-serif;
+	font-size:16px;
+	background-color:#010713;
+	background-image:url('https://cdn.[CDN].steamstatic.com/apps/csgo/images//basepage/base_bg.jpg');
+	background-position:top center;
+	background-repeat:no-repeat;
+	color:#939393;
+	text-align:center;
+	margin:0;
+	padding:0;
+}
+
+#centerBlock {
+	width:940px;
+	background-image:url('https://cdn.[CDN].steamstatic.com/apps/csgo/images//basepage/base_bg.jpg');
+	background-position:top center;
+	background-repeat:no-repeat;
+	margin:0 auto;
+	padding-top:200px;
+	position:relative;
+}
+#topLogo {
+	position:absolute;
+	width:280px;
+	height:80px;
+	left:330px;
+	top:8px;
+}
+#mainColumn {
+	width:940px;
+	position:relative;
+	background-image:url('https://cdn.[CDN].steamstatic.com/apps/csgo/images//basepage/maincolumn_bg.jpg');
+	background-repeat:repeat-y;
+	border-bottom: 4px solid #171b1e;
+	padding-bottom:40px;
+	margin-bottom:30px;
+	min-height:800px;
+	-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.75);
+	-moz-box-shadow:    4px 4px 10px rgba(0, 0, 0, 0.75);
+	box-shadow:         4px 4px 10px rgba(0, 0, 0, 0.75);
+}
+#contentHeader {
+	width:940px;
+	height:50px;
+	position:relative;
+	background-image:url('https://cdn.[CDN].steamstatic.com/apps/csgo/images//basepage/nav_bar_dark.jpg');
+	-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.75);
+	-moz-box-shadow:    4px 4px 10px rgba(0, 0, 0, 0.75);
+	box-shadow:         4px 4px 10px rgba(0, 0, 0, 0.75);
+}
+#mainColumnShadow {
+	width:940px;
+	height:513px;
+	position:absolute;
+	background-image:url('https://cdn.[CDN].steamstatic.com/apps/csgo/images/basepage/maincolumn_shadow.png');
+	top:50px;
+	left:0px;
+	z-index:1;
+}
+#mainContent {
+	position:relative;
+	padding:  20px 0px 20px 160px;
+	text-align:left;
+	z-index:100;
+	line-height:18px;
+}
+#navLoginAndLanguage {
+	position:absolute;
+	text-align:right;
+	right:0px;
+	top:160px;
+}
+
+#navLoginAndLanguage a, #navLoginAndLanguage a:hover, #navLoginAndLanguage a:visited, #navLoginAndLanguage a:active {
+	color:#908d8b;
+	text-decoration:none;
+	font-size:11px;
+}
+
+#navLoginAndLanguage a:hover {
+	color:#ffffff;
+}
+
+#languageSelector {
+	display:inline;
+}
+
+#languageList {
+	padding:3px 2px;
+	border:solid #777777 1px;
+	background-color:#333333;
+	text-align:left;
+	z-index:999999;
+	position:absolute;
+	right:10px;
+	box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+	-moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+	-webkit-box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+}
+
+#languageList a {
+	display:block;
+	padding:3px 6px;
+}
+
+#languageList a:hover {
+	background-color:#555555;
+}
+
+#overviewHeader {
+	padding-top:8px;
+	color:#97b7d1;
+	font-size:24px;
+	font-weight:bold;
+}

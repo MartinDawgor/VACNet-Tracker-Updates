@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Cache-control" content="no-cache">
+
+	<title>CS2 Video Review</title>
+	<script type="text/javascript" src="https://www.counter-strike.net/public/shared/javascript/jquery-1.8.3.min.js?v=NXam5zydzNu8&amp;l=english"></script>
+<script type="text/javascript">$J = jQuery.noConflict();</script>
+	<script type="text/javascript" src="https://www.counter-strike.net/public/shared/javascript/video-8.23.3.novtt.min.js?v=5BdrMSfg7wnx&amp;l=english"></script>
+	<link href="https://www.counter-strike.net/public/shared/css/video-js/video-js-8.23.3.css?v=MpROnW4_DZB-&amp;l=english" rel="stylesheet" type="text/css">
+
+	<link href="https://www.counter-strike.net/public/css/csgo.css?v=b11153103&amp;l=english" rel="stylesheet" type="text/css">
+<link href="https://www.counter-strike.net/public/css/videoreview.css?v=UjiBKnC5L85A&amp;l=english" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div class="PageBackground"></div>
+
+<div class="PageHeader">
+	<img class="CSLogo" src="https://cdn.[CDN].steamstatic.com/apps/csgo/images/csgo_react/global/logo_cs_sm.svg"/>
+		<div class="right">
+					<a href="/vacnet/createinvite" class="invitebutton">Invite Reviewers</a>
+				<p class="ClipCount"><b>Clips Labeled</b> 816</p>
+		<p>󠀡 <a href="/oauth/logout?goto=vacnet">Logout</a></p>
+		</div>
+</div>
+
+	<!-- Got a task result -->
+	<div class="page-container">
+		<div class="review-layout">
+			<div class="video-column">
+				<div class="videocontainer">
+					<!-- Video -->
+					<video id="video"
+							class="video-js vjs-fill vjs-big-play-centered vjs-normalise-time-controls"
+							controls
+							loading="lazy"
+							autoplay="true"							playsinline="true" preload="metadata"
+							data-setup='{"playbackRates": [0.1, 0.2, 0.4, 0.75, 1.0], "inactivityTimeout": 0 }'
+							height="1080" width="1920">
+					<source src="https://replay-video.valve.net/cs_overwatch/cl_1ba6d8ce06ba693b0883b8b9c9288f9e2b6a9f592c1d34dfbd9aefc7bedafb23.webm" type="video/webm" />
+					</video>
+
+					<script language="javascript">
+						// quick and dirty local storage api for json-able objects
+						function LocalStorageGet( name, defaultVal )
+						{
+							const jsonVal = window.localStorage.getItem( name );
+							return ( jsonVal === null ) ? defaultVal : JSON.parse(jsonVal);
+						}
+						function LocalStorageSave( name, val )
+						{
+							const jsonVal = JSON.stringify( val );
+							window.localStorage.setItem( name, val );
+						}
+
+						// Set up video
+						( function() {
+
+							const startTime = 0.033333998173475;
+							const endTime = startTime + 12;
+							const eventTime = 10.033333778381;
+							const player = videojs( 'video' );
+							let loaded = false;
+							let ended = false;
+
+							player.on('loadedmetadata', function() {
+								if ( player.videoWidth() && player.videoHeight() )
+								{
+									document.querySelector('.review-layout').style.setProperty( '--video-ratio', player.videoWidth() / player.videoHeight() );
+								}
+							});
+
+							// Ambient glow: a tiny copy of the current frame, blurred behind the player.
+							const glow = document.createElement('canvas');
+							glow.className = 'video-glow';
+							glow.width = 32;
+							glow.height = 18;
+							const glowContext = glow.getContext('2d');
+							const glowSource = player.el().querySelector('video');
+							document.querySelector('.videocontainer').prepend( glow );
+							player.on( [ 'loadeddata', 'timeupdate', 'seeked' ], function() {
+								glowContext.drawImage( glowSource, 0, 0, glow.width, glow.height );
+							} );
+
+							// Initialize video settings and change callbacks for volume and playback rate
+							// so that we keep them in localStorage
+							player.volume( LocalStorageGet( 'playerVolume', 1.0 ) );
+							player.muted( LocalStorageGet( 'playerMuted', false ) );
+
+							player.on( 'volumechange', function() {
+								LocalStorageSave( 'playerVolume', player.volume() );
+								LocalStorageSave( 'playerMuted', player.muted() );
+							} );
+
+													// Clips start themselves and loop over the window of interest. A metamodel match is
+							// watched once from the beginning, and the reviewer presses play.
+							player.pause();
+							player.on('loadeddata', function() {
+								setTimeout( function()
+								{
+									player.currentTime(startTime);
+									player.play();
+									loaded = true;
+								}, 500)
+							});
+							player.on('ended', function() {
+								ended = true;
+							});
+
+							let checkTime = setInterval(function() {
+								const curTime = player.currentTime();
+								if (curTime >= endTime || ended)
+								{
+									player.pause();
+									player.currentTime( startTime );
+									ended = false;
+									setTimeout( function()
+									{
+										player.play();
+									}, 500)
+								}
+								else if (curTime < (startTime - 1.0/60.0))
+								{
+									player.currentTime( startTime );
+								}
+							}, 100);
+												} )();
+					</script>
+				</div>
+								<script>
+					// Keyboard shortcuts, as on YouTube. Fields keep their keys and focused buttons keep Space;
+					// video.js handles keys on its own controls and stops them reaching here.
+					( function() {
+						const player = videojs( 'video' );
+						const frameTime = 1 / 60;
+						const rates = player.playbackRates();
+
+						// A metamodel match can't be skipped ahead, so forward keys go no further than the watched point.
+						function SeekBy( seconds )
+						{
+							let time = Math.max( 0, player.currentTime() + seconds );
+														player.currentTime( time );
+						}
+
+						function StepFrame( frames )
+						{
+							player.pause();
+							SeekBy( frames * frameTime );
+						}
+
+						function StepRate( steps )
+						{
+							const rate = rates[ rates.indexOf( player.playbackRate() ) + steps ];
+							if ( rate )
+							{
+								player.playbackRate( rate );
+							}
+						}
+
+						const actions = {
+							' ': () => player.paused() ? player.play() : player.pause(),
+							'k': () => player.paused() ? player.play() : player.pause(),
+							'arrowleft': () => SeekBy( -5 ),
+							'arrowright': () => SeekBy( 5 ),
+							'j': () => SeekBy( -10 ),
+							'l': () => SeekBy( 10 ),
+							',': () => StepFrame( -1 ),
+							'.': () => StepFrame( 1 ),
+							'<': () => StepRate( -1 ),
+							'>': () => StepRate( 1 ),
+							'm': () => player.muted( !player.muted() ),
+						};
+
+						document.addEventListener( 'keydown', function( event ) {
+							const action = actions[ event.key.toLowerCase() ];
+							if ( !action || event.ctrlKey || event.metaKey || event.altKey
+								|| event.target.closest( 'input, select, textarea, [contenteditable]' )
+								|| ( event.key == ' ' && event.target.closest( 'button, a' ) ) )
+							{
+								return;
+							}
+							event.preventDefault();
+							action();
+						} );
+					} )();
+				</script>
+			</div>
+
+			<div class="verdict-column">
+				<div class="panel-header">
+					<div class="panel-logo" role="img" aria-label="VACNet"></div>
+					<p class="panel-clipcount"><b>816</b> Clips Labeled</p>
+				</div>
+								<section class="task-instructions">
+					<h3 class="task-title">Please watch the clip with audio, then answer each question.</h3>
+					<ul class="task-guidelines">
+													<li>X-Ray is active.</li>
+													<li>Your verdict doesn't affect this player. Accurate labels help train future VACNet models.</li>
+													<li>Choosing "Uncertain" is fine and expected. Only pick another answer if you're certain.</li>
+													<li>Clips aren't a representative sample of gameplay.</li>
+											</ul>
+				</section>
+						<div class="verdicts-container"><div class="verdict-block"><p class="verdict-desc">Is the Subject using Aim Assist to snap to opponents or instantly firing when an opponent enters the Subject's crosshair?</p><div id="verdictbuttons_aimassist" class="verdictbuttons"></div></div><div class="verdict-block"><p class="verdict-desc">Is the Subject using Wall Hacks to see enemy players through walls, floors, smokes, while flashed, or other obstacles?</p><div id="verdictbuttons_wallhack" class="verdictbuttons"></div></div><div class="verdict-block"><p class="verdict-desc">Is the Subject using assistance to time their jump inputs at the exact moment they land to increase movement speed?</p><div id="verdictbuttons_autobhop" class="verdictbuttons"></div></div><div class="verdict-block"><p class="verdict-desc">Does the Subject look fully automated?</p><div id="verdictbuttons_bot" class="verdictbuttons"></div></div>							</div>
+							<div id="submitbuttons" class="submitbuttons">
+							</div>
+
+							<script>
+								let subproblem = "";
+								let activeButton = null;
+								let buttonStates = [];
+								const defaultVerdict = "skip";
+								function ShowLabelingButtons() {
+																			subproblem = 'aimassist';
+										if (!(subproblem in buttonStates))
+										{
+											buttonStates[subproblem] = defaultVerdict;
+										}
+
+										document.getElementById('verdictbuttons_aimassist').innerHTML = `
+											<div class="verdictbutton positive">
+												<input type="radio" id="aimassist_positive" name="aimassist" value="positive">
+												<label for="aimassist_positive">Label <span class='highlight-text'>Aim Assist</span></label>
+											</div>
+
+											<div class="verdictbutton skip">
+												<input type="radio" id="aimassist_skip" name="aimassist" value="skip">
+												<label for="aimassist_skip"><b>Uncertain</b></label>
+											</div>
+
+											<div class="verdictbutton negative">
+												<input type="radio" id="aimassist_negative" name="aimassist" value="negative">
+												<label for="aimassist_negative">Label <span class='highlight-text-negative'>Not</span> Aim Assist</label>
+											</div>
+											`;
+										activeButton = document.getElementById(subproblem + "_" + buttonStates[subproblem]);
+										if ( activeButton )
+										{
+											activeButton.checked = true;
+										}
+																			subproblem = 'wallhack';
+										if (!(subproblem in buttonStates))
+										{
+											buttonStates[subproblem] = defaultVerdict;
+										}
+
+										document.getElementById('verdictbuttons_wallhack').innerHTML = `
+											<div class="verdictbutton positive">
+												<input type="radio" id="wallhack_positive" name="wallhack" value="positive">
+												<label for="wallhack_positive">Label <span class='highlight-text'>Wall Hack</span></label>
+											</div>
+
+											<div class="verdictbutton skip">
+												<input type="radio" id="wallhack_skip" name="wallhack" value="skip">
+												<label for="wallhack_skip"><b>Uncertain</b></label>
+											</div>
+
+											<div class="verdictbutton negative">
+												<input type="radio" id="wallhack_negative" name="wallhack" value="negative">
+												<label for="wallhack_negative">Label <span class='highlight-text-negative'>Not</span> Wall Hack</label>
+											</div>
+											`;
+										activeButton = document.getElementById(subproblem + "_" + buttonStates[subproblem]);
+										if ( activeButton )
+										{
+											activeButton.checked = true;
+										}
+																			subproblem = 'autobhop';
+										if (!(subproblem in buttonStates))
+										{
+											buttonStates[subproblem] = defaultVerdict;
+										}
+
+										document.getElementById('verdictbuttons_autobhop').innerHTML = `
+											<div class="verdictbutton positive">
+												<input type="radio" id="autobhop_positive" name="autobhop" value="positive">
+												<label for="autobhop_positive">Label <span class='highlight-text'>Auto BHop</span></label>
+											</div>
+
+											<div class="verdictbutton skip">
+												<input type="radio" id="autobhop_skip" name="autobhop" value="skip">
+												<label for="autobhop_skip"><b>Uncertain</b></label>
+											</div>
+
+											<div class="verdictbutton negative">
+												<input type="radio" id="autobhop_negative" name="autobhop" value="negative">
+												<label for="autobhop_negative">Label <span class='highlight-text-negative'>Not</span> Auto BHop</label>
+											</div>
+											`;
+										activeButton = document.getElementById(subproblem + "_" + buttonStates[subproblem]);
+										if ( activeButton )
+										{
+											activeButton.checked = true;
+										}
+																			subproblem = 'bot';
+										if (!(subproblem in buttonStates))
+										{
+											buttonStates[subproblem] = defaultVerdict;
+										}
+
+										document.getElementById('verdictbuttons_bot').innerHTML = `
+											<div class="verdictbutton positive">
+												<input type="radio" id="bot_positive" name="bot" value="positive">
+												<label for="bot_positive">Label <span class='highlight-text'>Bot Player</span></label>
+											</div>
+
+											<div class="verdictbutton skip">
+												<input type="radio" id="bot_skip" name="bot" value="skip">
+												<label for="bot_skip"><b>Uncertain</b></label>
+											</div>
+
+											<div class="verdictbutton negative">
+												<input type="radio" id="bot_negative" name="bot" value="negative">
+												<label for="bot_negative">Label <span class='highlight-text-negative'>Not</span> Bot Player</label>
+											</div>
+											`;
+										activeButton = document.getElementById(subproblem + "_" + buttonStates[subproblem]);
+										if ( activeButton )
+										{
+											activeButton.checked = true;
+										}
+																	}
+
+								function SetVerdictsLocked( locked ) {
+									document.querySelector('.verdict-column').classList.toggle('confirming', locked);
+									UpdateVerdictButtons();
+								}
+
+								// While confirming, the choice is locked. Otherwise clips offer every verdict; a metamodel match
+								// offers Mark Cheating once it has been started and the others once it has been watched.
+								function UpdateVerdictButtons() {
+									const panel = document.querySelector('.verdict-column');
+									const confirming = panel.classList.contains('confirming');
+									for ( const input of panel.querySelectorAll('.verdictbutton input') )
+									{
+																					const available = true;
+																				input.disabled = confirming || !available;
+									}
+								}
+
+								function SetSubmitting( message ) {
+									for ( const button of document.querySelectorAll('#submitbuttons button') )
+									{
+										button.disabled = true;
+									}
+									const submitHint = document.getElementById('submithint');
+									submitHint.classList.remove('success', 'fade');
+									delete submitHint.dataset.verdict;
+									submitHint.textContent = message;
+								}
+
+								function SetModeLabeling() {
+									SetVerdictsLocked( false );
+									document.getElementById('submitbuttons').innerHTML = `
+									<p class="submithint" id="submithint" role="status"></p>
+																			<button class="submitverdictbutton" id="submitVerdictButton" onclick="SetModeConfirmLabels()">Proceed</button>
+																			`;
+								}
+
+								function SetModeConfirmLabels( hint = "Review your answers" ) {
+
+									var verdictform = document.getElementById('submitverdictform');
+
+									let elements = Array.from( verdictform.children );
+									for( const input of elements )
+									{
+										if( input.name == "verdict_labels[]" )
+										{
+											verdictform.removeChild(input);
+										}
+									}
+
+																			var selectedVerdict = document.querySelector('input[name="aimassist"]:checked').value;
+										buttonStates['aimassist'] = selectedVerdict;
+										var label = "INVALID";
+
+										if (selectedVerdict == "positive")
+										{
+											label = "guilty_aimassist";
+										}
+										else if (selectedVerdict == "skip")
+										{
+											label = "skip_aimassist";
+										}
+										else if (selectedVerdict == "negative")
+										{
+											label = "innocent_aimassist";
+										}
+
+										var input = document.createElement('input');
+										input.type = "hidden";
+										input.name = "verdict_labels[]";
+										input.value = label;
+										verdictform.append(input);
+
+																			var selectedVerdict = document.querySelector('input[name="wallhack"]:checked').value;
+										buttonStates['wallhack'] = selectedVerdict;
+										var label = "INVALID";
+
+										if (selectedVerdict == "positive")
+										{
+											label = "guilty_wallhack";
+										}
+										else if (selectedVerdict == "skip")
+										{
+											label = "skip_wallhack";
+										}
+										else if (selectedVerdict == "negative")
+										{
+											label = "innocent_wallhack";
+										}
+
+										var input = document.createElement('input');
+										input.type = "hidden";
+										input.name = "verdict_labels[]";
+										input.value = label;
+										verdictform.append(input);
+
+																			var selectedVerdict = document.querySelector('input[name="autobhop"]:checked').value;
+										buttonStates['autobhop'] = selectedVerdict;
+										var label = "INVALID";
+
+										if (selectedVerdict == "positive")
+										{
+											label = "guilty_autobhop";
+										}
+										else if (selectedVerdict == "skip")
+										{
+											label = "skip_autobhop";
+										}
+										else if (selectedVerdict == "negative")
+										{
+											label = "innocent_autobhop";
+										}
+
+										var input = document.createElement('input');
+										input.type = "hidden";
+										input.name = "verdict_labels[]";
+										input.value = label;
+										verdictform.append(input);
+
+																			var selectedVerdict = document.querySelector('input[name="bot"]:checked').value;
+										buttonStates['bot'] = selectedVerdict;
+										var label = "INVALID";
+
+										if (selectedVerdict == "positive")
+										{
+											label = "guilty_bot";
+										}
+										else if (selectedVerdict == "skip")
+										{
+											label = "skip_bot";
+										}
+										else if (selectedVerdict == "negative")
+										{
+											label = "innocent_bot";
+										}
+
+										var input = document.createElement('input');
+										input.type = "hidden";
+										input.name = "verdict_labels[]";
+										input.value = label;
+										verdictform.append(input);
+
+									
+									SetVerdictsLocked( true );
+									document.getElementById('submitbuttons').innerHTML = `
+										<p class="submithint" id="submithint" role="status"></p>
+																					<button class="backbutton" id="backbutton" onclick="SetModeLabeling()">Back</button>
+																				<button class="submitverdictbutton arming" id="submitVerdictButton" onclick="SubmitLabels()" onanimationend="this.classList.remove('arming'); this.disabled = false;" disabled>Confirm</button>
+									`;
+									document.getElementById('submithint').textContent = hint;
+								}
+
+								function SubmitLabels() {
+									SetSubmitting( "Submitting..." );
+									document.getElementById('submitverdictform').submit();
+								}
+
+								function ReportBadClip() {
+									var verdictform = document.getElementById('submitverdictform');
+
+									// clear out any labels
+									let elements = Array.from( verdictform.children );
+									for( const input of elements )
+									{
+										if( input.name == "verdict_labels[]" )
+										{
+											verdictform.removeChild(input);
+										}
+									}
+
+									// add a tag_badclip label
+									var input = document.createElement('input');
+									input.type = "hidden";
+									input.name = "verdict_labels[]";
+									input.value = "tag_badclip";
+									verdictform.append(input);
+
+									SetSubmitting( "Please Wait..." );
+									document.getElementById('submitverdictform').submit();
+								}
+
+								ShowLabelingButtons();
+								SetModeLabeling();
+
+								
+								// if we just submitted a label, show the confirmation
+															</script>
+						
+				<!-- Verdict submit form -->
+				<form id="submitverdictform" method="POST" action="/vacnet/submit?">
+					<input type="hidden" name="verdict_task" value="1977692">
+									</form>
+			</div>
+		</div>
+	</div>
+
+	<div id="detailsModalOverlay" class="modaloverlay">
+				<div id="detailsModalContent" class="modalcontent">
+					<div id="detailsModalHeader" class="modalheader">
+						Clip Details
+						<span id="closeDetailsButton" class="modalclosebutton">X</span>
+					</div>
+					<div >
+						<table class="detailstable">
+							<tr>
+								<td>Task ID</td>
+								<td>
+																			<a href="https://www.counter-strike.net/vacnet/view?s=[TASK_TOKEN]">1977692</a>
+																	</td>
+							</tr>
+							<tr>
+								<td>App</td>
+								<td>730</td>
+							</tr>
+														<tr>
+								<td>Match ID</td>
+								<td>none</td>
+							</tr>
+						</table>
+			</div>
+		</div>
+	</div>
+
+	
+<!-- Data source selection -->
+
+	<!-- Got a task result -->
+	<script>
+		class Modal {
+			constructor(openButtonID, closeButtonID, overlayID, dragHandleID, contentID)
+			{
+				const openButton = document.getElementById(openButtonID);
+				const closeButton = document.getElementById(closeButtonID);
+				const overlay = document.getElementById(overlayID);
+				const content = document.getElementById(contentID)
+
+				openButton.addEventListener('click', () =>
+				{
+					overlay.style.display = 'block';
+
+					const buttons = document.querySelectorAll('.detailsbutton');
+					buttons.forEach(button =>
+					{
+						button.disabled = true;
+					});
+				});
+
+				closeButton.addEventListener('click', () =>
+				{
+					overlay.style.display = 'none';
+
+					const buttons = document.querySelectorAll('.detailsbutton');
+					buttons.forEach(button =>
+					{
+						button.disabled = false;
+					});
+				});
+
+				let isDragging = false;
+				let offsetX = 0;
+				let offsetY = 0;
+
+				let dragHandle = document.getElementById(dragHandleID);
+				dragHandle.addEventListener('mousedown', (e) =>
+				{
+					isDragging = true;
+					offsetX = e.clientX - content.offsetLeft;
+					offsetY = e.clientY - content.offsetTop;
+				});
+
+				document.addEventListener('mousemove', (e) =>
+				{
+					if (!isDragging)
+						return;
+					content.style.left = e.clientX - offsetX + 'px';
+					content.style.top  = e.clientY - offsetY + 'px';
+				});
+
+				document.addEventListener('mouseup', () =>
+				{
+					isDragging = false;
+				});
+			}
+		}
+
+		const detailsModal = new Modal('showDetailsModal', 'closeDetailsButton', 'detailsModalOverlay', 'detailsModalHeader', 'detailsModalContent');
+			</script>
+
+
+<footer class="footer-container">
+	<div class="footer-buttons">
+			<a class="mail-to" href="mailto:cs2team@valvesoftware.com?subject=Video Labeling Feedback">Send Feedback</a>
+			<a href="#" onclick="ReportBadClip(); return false;">Report Bad Clip</a>
+			</div>
+	<p>Counter-Strike, Counter-Strike 2, CS:GO, and their respective logos are trademarks and/or registered trademarks of Valve Corporation. © 2023 Valve Corporation, all rights reserved.</p>
+</footer>
+
+</body>
+</html>
